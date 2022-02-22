@@ -27,6 +27,8 @@ Sept 23 2019
 import numpy as np
 import datetime
 import re
+from os import listdir
+from os.path import isdir, join
 from . import ApresData
 
 # -----------------------------------------------------------------------------------------------------
@@ -36,7 +38,7 @@ def load_apres(fns_apres,burst=1,fs=40000, *args, **kwargs):
 
     Parameters
     ----------
-    fns_apres: list of file names for ApresData
+    fns_apres: list of file names or folder for ApresData
         each loads object to concatenate
 
     Returns
@@ -44,6 +46,10 @@ def load_apres(fns_apres,burst=1,fs=40000, *args, **kwargs):
     RadarData
         A single, concatenated output.
     """
+
+    if isdir(fns_apres):
+        # Check if fns_apres is a folder.
+        fns_apres = [join(fns_apres,f) for f in listdir(fns_apres) if f.upper().endswith('.DAT')]
 
     apres_data = []
     for fn in fns_apres:
